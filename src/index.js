@@ -2,47 +2,38 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-class Input extends React.Component {
-  constructor(props){
-    super(props);
+class App extends React.Component {
+  constructor(props) {
+    super(props)
     this.state = {
-      value: '', 
-      text: ''
+      text: '',
+      task: []
     }
-    this.handleChange = this.handleChange.bind(this);
-    this.fillField = this.fillField.bind(this);
+    this.RecordValue =   this.RecordValue.bind(this)
+    this.addItem =   this.addItem.bind(this)
   }
-  handleChange(event){
-    this.setState({value: event.target.value})
+  RecordValue(event) {
+    this.setState({
+      text: event.target.value
+    })
   }
-  fillField(event){
-    this.setState({text: this.state.value})
-    event.preventDefault();
-    ReactDOM.render(<Element />, document.getElementById('form'));
+  addItem(event) {
+    event.preventDefault()
+    this.setState({
+      task: [...this.state.task, this.state.text]
+    })
   }
-  render() { 
+  render() {
     return (
-      <form id="form">
-        <input
-        placeholder="Введите текст"
-        value={this.state.value}
-        onChange={this.handleChange}
-        >
-        </input>
-        <button onClick={this.fillField}>Кнопка</button>
-      </form>
-    );
-  }
-}
-class Element extends Input{
-  render(){
-    return(
-        <div id="newElement">{this.state.text}</div>
+      <form onSubmit={this.addItem}>
+        <input onChange={this.RecordValue} value={this.state.text}></input>
+        <button type="submit">Добавить</button>
+        <div>{this.state.task}</div>
+      </form> 
     )
   }
 }
-
 ReactDOM.render(
-  <Input />, 
+  <App />, 
   document.getElementById('root')
 )
