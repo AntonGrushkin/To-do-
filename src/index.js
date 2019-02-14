@@ -7,10 +7,11 @@ class App extends React.Component {
     super(props)
     this.state = {
       text: '',
-      task: []
+      tasks: []
     }
     this.RecordValue =   this.RecordValue.bind(this)
     this.addItem =   this.addItem.bind(this)
+
   }
   RecordValue(event) {
     this.setState({
@@ -20,19 +21,32 @@ class App extends React.Component {
   addItem(event) {
     event.preventDefault()
     this.setState({
-      task: [...this.state.task, this.state.text]
+      tasks: [...this.state.tasks, this.state.text],
+      text: ''
     })
   }
   render() {
     return (
-      <form onSubmit={this.addItem}>
+      <div>
         <input onChange={this.RecordValue} value={this.state.text}></input>
-        <button type="submit">Добавить</button>
-        <div>{this.state.task}</div>
-      </form> 
+        <button onClick={this.addItem}>Добавить</button>
+        <List tasks={this.state.tasks}/>
+      </div> 
+    )
+  }
+} 
+
+class List extends App {
+  
+  render() {
+    return (
+      <div>
+        <ul>{this.props.tasks.map((task, index) => <li key={index}>{task}</li>)}</ul>
+      </div> 
     )
   }
 }
+
 ReactDOM.render(
   <App />, 
   document.getElementById('root')
