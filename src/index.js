@@ -11,7 +11,7 @@ class App extends React.Component {
     }
     this.RecordValue =   this.RecordValue.bind(this)
     this.addItem =   this.addItem.bind(this)
-
+    this.deleteItem =   this.deleteItem.bind(this)
   }
   RecordValue(event) {
     this.setState({
@@ -20,9 +20,16 @@ class App extends React.Component {
   }
   addItem(event) {
     event.preventDefault()
+    if(this.state.text !== '') {
+      this.setState({ 
+        tasks: [...this.state.tasks, this.state.text], 
+        text: ''
+      })
+    }
+  }
+  deleteItem(task) {
     this.setState({
-      tasks: [...this.state.tasks, this.state.text],
-      text: ''
+      tasks: this.state.tasks.filter((currentTask) => currentTask !== task)
     })
   }
   render() {
@@ -30,22 +37,11 @@ class App extends React.Component {
       <div>
         <input onChange={this.RecordValue} value={this.state.text}></input>
         <button onClick={this.addItem}>Добавить</button>
-        <List tasks={this.state.tasks}/>
+        <ul>{this.state.tasks.map((task, index) => <li key={index}>{task}<button onClick={() => this.deleteItem(task)}>Удалить</button></li>)}</ul>
       </div> 
     )
   }
 } 
-
-class List extends App {
-  
-  render() {
-    return (
-      <div>
-        <ul>{this.props.tasks.map((task, index) => <li key={index}>{task}</li>)}</ul>
-      </div> 
-    )
-  }
-}
 
 ReactDOM.render(
   <App />, 
